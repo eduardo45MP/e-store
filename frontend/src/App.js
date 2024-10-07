@@ -1,3 +1,4 @@
+//src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Estoque from './components/Estoque';
@@ -5,9 +6,12 @@ import ItemVenda from './components/ItemVenda';
 import Produto from './components/Produto';
 import Usuario from './components/Usuario';
 import Venda from './components/Venda';
+import Home from "./components/Home"
 import './styles/style.css'; // Importa o CSS global
 
 function App() {
+    console.log('App component rendered'); // Log ao renderizar o componente App
+
     return (
         <Router>
             <div>
@@ -20,24 +24,25 @@ function App() {
                     {/* Links para as páginas */}
                     <div className="menu">
                         <Link to="/estoque">
-                            <button>Estoque</button>
+                            <button onClick={() => console.log('Navigating to Estoque')}>Estoque</button>
                         </Link>
                         <Link to="/item-venda">
-                            <button>Item Venda</button>
+                            <button onClick={() => console.log('Navigating to Item Venda')}>Item Venda</button>
                         </Link>
                         <Link to="/produto">
-                            <button>Produto</button>
+                            <button onClick={() => console.log('Navigating to Produto')}>Produto</button>
                         </Link>
                         <Link to="/usuario">
-                            <button>Usuário</button>
+                            <button onClick={() => console.log('Navigating to Usuário')}>Usuário</button>
                         </Link>
                         <Link to="/venda">
-                            <button>Venda</button>
+                            <button onClick={() => console.log('Navigating to Venda')}>Venda</button>
                         </Link>
                     </div>
 
                     {/* Rotas que serão exibidas ao clicar nos botões */}
                     <Routes>
+                        <Route path="/" element={<Home />} />
                         <Route path="/estoque" element={<Estoque />} />
                         <Route path="/item-venda" element={<ItemVenda />} />
                         <Route path="/produto" element={<Produto />} />

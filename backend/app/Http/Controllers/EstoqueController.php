@@ -1,5 +1,6 @@
 <?php
 
+// app/Http/Controllers/EstoqueController.php
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -7,78 +8,54 @@ use App\Models\Estoque;
 
 class EstoqueController extends Controller
 {
+    // Retorna todos os itens de estoque como JSON
     public function index()
     {
-    // Obtém todos os itens de estoque
-    $itensEstoque = Estoque::with('produto')->get(); // Inclui as informações do produto
-
-    return view('estoque.index', compact('itensEstoque'));
+        $itensEstoque = Estoque::with('produto')->get();
+        return response()->json($itensEstoque);  // Retorna os dados em formato JSON
     }
 
+    // Exibe um item específico de estoque como JSON
     public function show($id)
     {
-        // Obtém um item de estoque específico
-        $itemEstoque = Estoque::with('produto')->findOrFail($id); // Utiliza findOrFail para lidar com o caso em que o item não existe
-    
-        return view('estoque.show', compact('itemEstoque'));
-    }    
+        $itemEstoque = Estoque::with('produto')->findOrFail($id);
+        return response()->json($itemEstoque);  // Retorna os dados em formato JSON
+    }
 
-    public function create()
-    {
-        // Exibe o formulário de criação de item de estoque
-        return view('estoque.create');
-    }    
-
+    // Cria um novo item de estoque
     public function store(Request $request)
     {
-        // Validação dos dados de entrada
-        $request->validate([
+        $validatedData = $request->validate([
             'produto_id' => 'required|exists:produtos,id',
             'quantidade' => 'required|integer|min:1',
             'tipo_movimentacao' => 'required|string',
             'data_movimentacao' => 'required|date',
         ]);
-    
-        // Cria um novo item de estoque
-        Estoque::create($request->all());
-    
-        // Redireciona para a lista de itens de estoque com uma mensagem de sucesso
-        return redirect()->route('estoque.index')->with('success', 'Item de estoque criado com sucesso.');
-    }    
 
-    public function edit($id)
-    {
-        // Obtém um item de estoque específico para edição
-        $itemEstoque = Estoque::findOrFail($id);
-    
-        return view('estoque.edit', compact('itemEstoque'));
-    }    
+        $estoque = Estoque::create($validatedData);
+        return response()->json($estoque, 201);  // Retorna o novo item criado com o status 201
+    }
 
+    // Atualiza um item de estoque existente
     public function update(Request $request, $id)
     {
-        // Validação dos dados de entrada
-        $request->validate([
+        $validatedData = $request->validate([
             'produto_id' => 'required|exists:produtos,id',
             'quantidade' => 'required|integer|min:1',
             'tipo_movimentacao' => 'required|string',
             'data_movimentacao' => 'required|date',
         ]);
-    
-        // Obtém o item de estoque específico e atualiza
-        $itemEstoque = Estoque::findOrFail($id);
-        $itemEstoque->update($request->all());
-    
-        // Redireciona para a lista de itens de estoque com uma mensagem de sucesso
-        return redirect()->route('estoque.index')->with('success', 'Item de estoque atualizado com sucesso.');
-    }    
 
+        $itemEstoque = Estoque::findOrFail($id);
+        $itemEstoque->update($validatedData);
+        return response()->json($itemEstoque);
+    }
+
+    // Deleta um item de estoque
     public function destroy($id)
     {
-        // Obtém o item de estoque específico e exclui
         $itemEstoque = Estoque::findOrFail($id);
         $itemEstoque->delete();
-    
-        // Redireciona para a lista de itens de estoque com uma mensagem de sucesso
-        return redirect()->route('estoque.index')->with('success', 'Item de estoque excluído com sucesso.');
-    }    
+        return response()->json(null, 204);  // Retorna uma resposta 204 (Sem Conteúdo)
+    }
 }
