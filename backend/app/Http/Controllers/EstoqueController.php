@@ -1,61 +1,75 @@
 <?php
-
-// app/Http/Controllers/EstoqueController.php
+//app/Http/Controllers/EstoqueController.php
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Estoque;
+use App\Models\Produto; // Supondo que você tenha um modelo Produto
 
 class EstoqueController extends Controller
 {
-    // Retorna todos os itens de estoque como JSON
+    // Método para listar todos os produtos em estoque
     public function index()
     {
-        $itensEstoque = Estoque::with('produto')->get();
-        return response()->json($itensEstoque);  // Retorna os dados em formato JSON
+        $produtos = Produto::all(); // Busca todos os produtos no banco de dados
+        return view('estoque.index', compact('produtos')); // Passa os produtos para a view
     }
 
-    // Exibe um item específico de estoque como JSON
-    public function show($id)
+    // Método para mostrar o formulário de criação de um novo produto
+    public function create()
     {
-        $itemEstoque = Estoque::with('produto')->findOrFail($id);
-        return response()->json($itemEstoque);  // Retorna os dados em formato JSON
+        return view('estoque.create'); // Retorna a view de criação
     }
 
-    // Cria um novo item de estoque
+    // Método para armazenar um novo produto
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'produto_id' => 'required|exists:produtos,id',
-            'quantidade' => 'required|integer|min:1',
-            'tipo_movimentacao' => 'required|string',
-            'data_movimentacao' => 'required|date',
+        // Validação dos dados recebidos
+        $request->validate([
+            'nome' => 'required|string|max:255',
+            'descricao' => 'required|string|max:500', // Adicione a validação para descrição
+            'quantidade' => 'required|integer|min:0',
+            'preco' => 'required|numeric|min:0',
         ]);
 
-        $estoque = Estoque::create($validatedData);
-        return response()->json($estoque, 201);  // Retorna o novo item criado com o status 201
+        // Criação de um novo produto
+        Produto::create($request->all());
+
+        // Redireciona de volta para o índice com uma mensagem de sucesso
+        return redirect()->route('estoque.index')->with('success', 'Produto adicionado com sucesso!');
     }
 
-    // Atualiza um item de estoque existente
+    // Método para mostrar o formulário de edição de um produto existente
+    public function edit($id)
+    {
+        $produto = Produto::findOrFail($id); // Busca o produto pelo ID
+        return view('estoque.edit', compact('produto')); // Retorna a view de edição
+    }
+
+    // Método para atualizar um produto existente
     public function update(Request $request, $id)
     {
-        $validatedData = $request->validate([
-            'produto_id' => 'required|exists:produtos,id',
-            'quantidade' => 'required|integer|min:1',
-            'tipo_movimentacao' => 'required|string',
-            'data_movimentacao' => 'required|date',
+        // Validação dos dados recebidos
+        $request->validate([
+            'nome' => 'required|string|max:255',
+            'quantidade' => 'required|integer|min:0',
+            'preco' => 'required|numeric|min:0',
         ]);
 
-        $itemEstoque = Estoque::findOrFail($id);
-        $itemEstoque->update($validatedData);
-        return response()->json($itemEstoque);
+        // Busca o produto e atualiza os dados
+        $produto = Produto::findOrFail($id);
+        $produto->update($request->all());
+
+        // Redireciona de volta para o índice com uma mensagem de sucesso
+        return redirect()->route('estoque.index')->with('success', 'Produto atualizado com sucesso!');
     }
 
-    // Deleta um item de estoque
+    // Método para deletar um produto
     public function destroy($id)
     {
-        $itemEstoque = Estoque::findOrFail($id);
-        $itemEstoque->delete();
-        return response()->json(null, 204);  // Retorna uma resposta 204 (Sem Conteúdo)
+        $produto = Produto::findOrFail($id);
+        $produto->delete(); // Deleta o produto
+
+        // Redireciona de volta para o índice com uma mensagem de sucesso
+        return redirect()->route('estoque.index')->with('success', 'Produto removido com sucesso!');
     }
 }

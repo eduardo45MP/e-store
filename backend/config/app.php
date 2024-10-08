@@ -1,6 +1,4 @@
 <?php
-//config/app.php
-use Illuminate\Support\Facades\Log;
 
 return [
 
@@ -43,12 +41,6 @@ return [
 
     'debug' => (bool) env('APP_DEBUG', false),
 
-    // Logging debug example
-    'logging' => function () {
-        Log::info('Application debug mode: ' . env('APP_DEBUG', false));
-        Log::debug('Application environment is: ' . env('APP_ENV', 'production'));
-    },
-
     /*
     |--------------------------------------------------------------------------
     | Application URL
@@ -75,11 +67,6 @@ return [
 
     'timezone' => env('APP_TIMEZONE', 'UTC'),
 
-    // Log timezone config for debugging
-    'timezone' => function () {
-        Log::info('Timezone set to: ' . env('APP_TIMEZONE', 'UTC'));
-    },
-
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
@@ -92,11 +79,6 @@ return [
     */
 
     'locale' => env('APP_LOCALE', 'en'),
-
-    // Debugging locale setting
-    'locale' => function () {
-        Log::info('Application locale set to: ' . env('APP_LOCALE', 'en'));
-    },
 
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
 
@@ -140,9 +122,5 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
-    
-    // Log Maintenance Mode configuration
-    'maintenance' => function () {
-        Log::info('Maintenance mode set to: ' . env('APP_MAINTENANCE_DRIVER', 'file'));
-    },
+
 ];

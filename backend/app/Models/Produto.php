@@ -1,5 +1,5 @@
 <?php
-
+//app/Models/Produto.php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,11 +11,12 @@ class Produto extends Model
 
     protected $table = 'produtos';
 
+    // Inclui todos os campos que podem ser atribuídos em massa
     protected $fillable = [
         'nome',
         'descricao',
         'preco',
-        'estoque',
+        'quantidade', // Aqui, eu troquei de 'estoque' para 'quantidade'
     ];
 
     // Relações

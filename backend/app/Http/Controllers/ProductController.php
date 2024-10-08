@@ -1,9 +1,9 @@
 <?php
-//app/Http/Controllers/ProductController.php
+// app/Http/Controllers/ProductController.php
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Produto; // Assumindo que o modelo Product existe
+use App\Models\Produto; // Assumindo que o modelo Produto existe
 
 class ProductController extends Controller
 {
@@ -39,18 +39,18 @@ class ProductController extends Controller
     {
         // Validação dos dados enviados pelo formulário
         $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-            'description' => 'nullable|string',
-            'stock' => 'required|integer|min:0',
+            'nome' => 'required|string|max:255',        // Alterado para 'nome'
+            'preco' => 'required|numeric|min:0',        // Alterado para 'preco'
+            'descricao' => 'nullable|string',            // Alterado para 'descricao'
+            'estoque' => 'required|integer|min:0',      // Alterado para 'estoque'
         ]);
 
         // Cria o novo produto no banco de dados
         Produto::create([
-            'name' => $request->input('name'),
-            'price' => $request->input('price'),
-            'description' => $request->input('description'),
-            'stock' => $request->input('stock'),
+            'nome' => $request->input('nome'),         // Alterado para 'nome'
+            'preco' => $request->input('preco'),       // Alterado para 'preco'
+            'descricao' => $request->input('descricao'), // Alterado para 'descricao'
+            'estoque' => $request->input('estoque'),    // Alterado para 'estoque'
         ]);
 
         // Redireciona de volta para a lista de produtos com uma mensagem de sucesso
@@ -72,10 +72,10 @@ class ProductController extends Controller
     {
         // Validação dos dados enviados pelo formulário
         $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-            'description' => 'nullable|string',
-            'stock' => 'required|integer|min:0',
+            'nome' => 'required|string|max:255',       // Alterado para 'nome'
+            'preco' => 'required|numeric|min:0',       // Alterado para 'preco'
+            'descricao' => 'nullable|string',           // Alterado para 'descricao'
+            'estoque' => 'required|integer|min:0',     // Alterado para 'estoque'
         ]);
 
         // Busca o produto pelo ID
@@ -83,10 +83,10 @@ class ProductController extends Controller
 
         // Atualiza os dados do produto
         $product->update([
-            'name' => $request->input('name'),
-            'price' => $request->input('price'),
-            'description' => $request->input('description'),
-            'stock' => $request->input('stock'),
+            'nome' => $request->input('nome'),         // Alterado para 'nome'
+            'preco' => $request->input('preco'),       // Alterado para 'preco'
+            'descricao' => $request->input('descricao'), // Alterado para 'descricao'
+            'estoque' => $request->input('estoque'),    // Alterado para 'estoque'
         ]);
 
         // Redireciona de volta para a lista de produtos com uma mensagem de sucesso
